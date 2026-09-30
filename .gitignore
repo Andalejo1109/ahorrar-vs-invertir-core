@@ -1,0 +1,10 @@
+.Rhistory
+.RData
+.Rproj.user
+.Ruserdata
+*.Rproj
+renv/library/
+renv/staging/
+.DS_Store
+data/*.rds
+data/*.parquet
