@@ -1,24 +1,61 @@
-# Ahorrar vs Invertir - core renta variable (2013-hoy)
+# Ahorrar vs Invertir — core renta variable
 
-Con los **mismos aportes mensuales**, cuanto crece una cuenta de **renta fija USD al 5 % anual** frente al **core de renta variable** (SPYG, SMH, BRK.B, IEMG, VTI) usando precios reales Adjusted Close?
+¿Con los **mismos aportes mensuales**, cuánto crece una cuenta de **renta fija USD al 5 % anual** frente al **core de renta variable** (SPYG, SMH, BRK.B, IEMG, VTI) usando precios reales Adjusted Close?
 
-> **Disclaimer:** Esto **no es consejo de inversion**. Los retornos pasados no predicen resultados futuros. Material educativo y medible.
+> **Disclaimer:** Esto **no es consejo de inversión**. Los retornos pasados no predicen resultados futuros. Material educativo y medible. No hay garantía de que la renta variable supere a la renta fija en el futuro.
 
-Autor: **Andres Alejandro Rodriguez Lozano** | [@Andalejo1109](https://github.com/Andalejo1109) | [andalejo1109.github.io](https://andalejo1109.github.io) | eToro [@Andalejo1109](https://www.etoro.com/people/andalejo1109)
+Autor: **Andrés Alejandro Rodríguez Lozano** · [@Andalejo1109](https://github.com/Andalejo1109) · [andalejo1109.github.io](https://andalejo1109.github.io) · eToro [@Andalejo1109](https://www.etoro.com/people/andalejo1109)
 
-## Parametros [DEFAULT]
+---
 
-| Parametro | Valor |
+## Para clase (data analytics)
+
+**Abre y corre un solo archivo:** `taller.R`
+
+```bash
+cd ahorrar-vs-invertir-core
+Rscript taller.R
+```
+
+O ábrelo en RStudio / R y haz *Source*.
+
+**Cambia solo el bloque `CONFIG` al inicio de `taller.R`.** No hace falta editar el resto del pipeline.
+
+### Escenarios de ejemplo (comentados en CONFIG)
+
+| Escenario | start | capital_inicial | aporte_mensual | rf_annual | Notas |
+|-----------|-------|----------------:|---------------:|----------:|-------|
+| **B — DEFAULT de clase** | 2020-01-01 | 1000 | **500** | 0.05 | Horizonte más corto; bueno para el taller |
+| A — horizonte largo | 2013-01-01 | 1000 | **200** | 0.05 | Default histórico anterior |
+
+Para pasar al escenario A: en el bloque CONFIG de `taller.R`, comenta las líneas de B y descomenta las de A (están documentadas arriba del CONFIG).
+
+### Salidas
+
+- `output/comparar_estatico.png` — figura de dos paneles
+- `output/comparar_animado.gif` — animación RF vs core
+- `output/metricas.csv` — tabla de métricas
+- `data/adj_close.rds` — cache de precios (< 24 h se reutiliza)
+
+---
+
+## La pregunta (en una frase)
+
+Si cada mes aportas lo mismo, ¿qué pasa si ese dinero se queda en una cuenta "segura" al 5 % USD versus si se invierte en el core long-only de ETFs?
+
+## Parámetros [DEFAULT de clase = 2020 / $500]
+
+| Parámetro | Valor |
 |-----------|------:|
-| `start` | 2013-01-01 |
+| `start` | **2020-01-01** |
 | `end` | fecha de corrida (`Sys.Date()`) |
-| **`aporte_mensual`** | **200 USD** |
+| **`aporte_mensual`** | **500 USD** |
 | `capital_inicial` | 1000 USD |
-| **`rf_annual`** | **5 % constante** |
-| Capitalizacion RF | diaria: `(1 + 0.05)^(dias/365.25)` |
-| Costos | **0 bps** |
-| Dia de aporte | primer dia habil de cada mes |
-| Rebalance equity | mensual en el dia de aporte |
+| **`rf_annual`** | **5 % constante** (sin curva de tasas) |
+| Capitalización RF | diaria por días calendario, factor `(1 + 0.05)^(días/365.25)` |
+| Costos | **0 bps** (claridad educativa; sin comisiones, TER, impuestos ni FX) |
+| Día de aporte | primer día hábil de cada mes (mismo calendario para RF y equity) |
+| Rebalance equity | mensual en el día de aporte, a pesos objetivo |
 
 ### Pesos del core
 
@@ -30,49 +67,47 @@ Autor: **Andres Alejandro Rodriguez Lozano** | [@Andalejo1109](https://github.co
 | IEMG | 0.20 |
 | VTI | 0.07 |
 
-## Hallazgos (corrida real)
+## Cómo leer los gráficos
 
-Muestra: **2013-01-02 -> 2026-09-29** (3456 dias habiles, ~**13.74 anos**). Costos = **0 bps**.
+![Comparar estático](output/comparar_estatico.png)
 
-| Metrica | Valor |
-|---------|------:|
-| Capital aportado | **$33,800** |
-| TV renta fija 5 % | **$48,665** |
-| TV core equity | **$140,346** |
-| Ratio equity / RF | **2.88x** |
-| Multiplo RF | 1.44x |
-| Multiplo equity | 4.15x |
-| CAGR aprox. RF (sobre aportado) | ~ 2.7 % |
-| CAGR aprox. equity (sobre aportado) | ~ 10.9 % |
-| Max drawdown equity | **-30.7 %** |
+- **Panel superior — Ahorrar / Renta fija 5 %:** área naranja = valor de la cuenta RF (aportes + interés compuesto).
+- **Panel inferior — Invertir / Core RV:** área naranja = capital aportado; área verde = valor de mercado del portafolio; línea punteada = path RF de referencia.
+- **GIF** (`output/comparar_animado.gif`): anima el crecimiento de ambas series en el tiempo.
 
-**CAGR aprox. sobre aportado** = `(TV / capital_aportado)^(1/anos) - 1`. No es TWR.
+## Dependencias
 
-### Lectura rapida
+Ver `REQUIREMENTS.md`. Resumen:
 
-Con los mismos $33,800 aportados, el core termino cerca de **2.9 veces** el valor de la cuenta al 5 %, con volatilidad (max DD ~ -31 %).
-
-## Como leer los graficos
-
-- Panel superior: RF 5 % (suave).
-- Panel inferior: core con volatilidad; area clara = capital aportado; linea punteada = RF.
-- GIF: `output/comparar_animado.gif` (generar con `Rscript main.R`).
-- Vista web: `output/galeria.html` (PNG embebido).
-
-## Como correr
-
-```bash
-Rscript -e 'install.packages(c("quantmod","ggplot2","dplyr","tidyr","scales","patchwork","zoo","gganimate","magick"), repos="https://cloud.r-project.org")'
-cd ahorrar-vs-invertir-core
-Rscript main.R
+```r
+install.packages(c(
+  "quantmod","ggplot2","dplyr","tidyr","scales","patchwork","zoo","magick"
+), repos = "https://cloud.r-project.org")
 ```
 
-Ver tambien `REQUIREMENTS.md`.
+`taller.R` intenta instalar solo lo que falte la primera vez que lo corres.
+
+## Estructura del repo
+
+| Ruta | Rol |
+|------|-----|
+| **`taller.R`** | **Script único para clase** (CONFIG + pipeline completo) |
+| `README.md` | Este archivo |
+| `LICENSE` | MIT |
+| `REQUIREMENTS.md` | Dependencias R / sistema |
+| `output/` | PNG, GIF, CSV generados |
+| `data/` | Cache local de precios (no versionado) |
+| `legacy/` | Scripts modulares antiguos (`config.R`, `main.R`, `01_*.R` …) |
 
 ## Limitaciones
 
-- RF 5 % constante; costos = 0; un solo camino historico 2013-hoy (alcista US/tech); sin FX; Adjusted Close Yahoo.
+- RF al 5 % **constante**; no usa Treasuries reales ni inflación.
+- Costos = 0: en la vida real hay TER, spreads y posibles impuestos.
+- Un solo camino histórico: el periodo puede ser en general alcista para acciones US/tech.
+- El “CAGR sobre aportado” no es TWR; no sirve para comparar gestores.
+- Sin FX: todo en USD.
+- Precios Adjusted Close (dividendos reinvertidos en el ajuste de Yahoo).
 
 ## Licencia
 
-MIT (c) Andres Alejandro Rodriguez Lozano
+MIT © Andrés Alejandro Rodríguez Lozano
