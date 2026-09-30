@@ -10,25 +10,25 @@ Autor: **Andrés Alejandro Rodríguez Lozano** · [@Andalejo1109](https://github
 
 ## Para clase (data analytics)
 
-**Abre y corre un solo archivo:** `taller.R`
+**Abre y corre un solo archivo:** `ahorrarvsinvertir.R`
 
 ```bash
 cd ahorrar-vs-invertir-core
-Rscript taller.R
+Rscript ahorrarvsinvertir.R
 ```
 
 O ábrelo en RStudio / R y haz *Source*.
 
-**Cambia solo el bloque `CONFIG` al inicio de `taller.R`.** No hace falta editar el resto del pipeline.
+**Cambia solo el bloque `CONFIG` al inicio de `ahorrarvsinvertir.R`.** No hace falta editar el resto del pipeline.
 
 ### Escenarios de ejemplo (comentados en CONFIG)
 
 | Escenario | start | capital_inicial | aporte_mensual | rf_annual | Notas |
 |-----------|-------|----------------:|---------------:|----------:|-------|
-| **B — DEFAULT de clase** | 2020-01-01 | 1000 | **500** | 0.05 | Horizonte más corto; bueno para el taller |
+| **B — DEFAULT de clase** | 2020-01-01 | 1000 | **500** | 0.05 | Horizonte más corto; bueno para clase |
 | A — horizonte largo | 2013-01-01 | 1000 | **200** | 0.05 | Default histórico anterior |
 
-Para pasar al escenario A: en el bloque CONFIG de `taller.R`, comenta las líneas de B y descomenta las de A (están documentadas arriba del CONFIG).
+Para pasar al escenario A: en el bloque CONFIG de `ahorrarvsinvertir.R`, comenta las líneas de B y descomenta las de A (están documentadas arriba del CONFIG).
 
 ### Salidas
 
@@ -41,7 +41,7 @@ Para pasar al escenario A: en el bloque CONFIG de `taller.R`, comenta las línea
 
 ## La pregunta (en una frase)
 
-Si cada mes aportas lo mismo, ¿qué pasa si ese dinero se queda en una cuenta "segura" al 5 % USD versus si se invierte en el core long-only de ETFs?
+Si cada mes aportas lo mismo, ¿qué pasa si ese dinero se queda en una cuenta “segura” al 5 % USD versus si se invierte en el core long-only de ETFs?
 
 ## Parámetros [DEFAULT de clase = 2020 / $500]
 
@@ -85,13 +85,13 @@ install.packages(c(
 ), repos = "https://cloud.r-project.org")
 ```
 
-`taller.R` intenta instalar solo lo que falte la primera vez que lo corres.
+`ahorrarvsinvertir.R` intenta instalar solo lo que falte la primera vez que lo corres.
 
 ## Estructura del repo
 
 | Ruta | Rol |
 |------|-----|
-| **`taller.R`** | **Script único para clase** (CONFIG + pipeline completo) |
+| **`ahorrarvsinvertir.R`** | **Script único para clase** (CONFIG + pipeline completo) |
 | `README.md` | Este archivo |
 | `LICENSE` | MIT |
 | `REQUIREMENTS.md` | Dependencias R / sistema |
