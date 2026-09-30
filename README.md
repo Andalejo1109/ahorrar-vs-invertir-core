@@ -35,7 +35,7 @@ Para pasar al escenario A: en el bloque CONFIG de `ahorrarvsinvertir.R`, comenta
 - `output/comparar_estatico.png` — figura de dos paneles
 - `output/comparar_animado.gif` — animación RF vs core
 - `output/metricas.csv` — tabla de métricas
-- `data/adj_close.rds` — cache de precios (< 24 h se reutiliza)
+- `data/adj_close.rds` — cache de precios (&lt; 24 h se reutiliza)
 
 ---
 
